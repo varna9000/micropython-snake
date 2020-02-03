@@ -1,5 +1,6 @@
 #Snake clone for Micropython
-#Problems with debouncing rotary encoder 
+#Problems with debouncing rotary encoder
+#Damn Git
 
 from machine import Pin, I2C
 import ssd1306
