@@ -26,9 +26,7 @@ r = RotaryQuadEncoder(pin1=12, pin2=13, half_steps=False, pins_pull_up=False,
     track_count=True, reverse=False, range_mode=RotaryQuadEncoder.RANGE_BOUNDED, min=0, max=1) 
 
 
-push_b=Pin(5, Pin.IN)
-
-selected=''    
+push_b=Pin(5, Pin.IN)   
 
 def move_snake(snake_dir):
     global snake
@@ -115,13 +113,7 @@ r.pin2.irq(trigger=Pin.IRQ_RISING | Pin.IRQ_FALLING, handler=rotate)
 
 oled.fill(0)
 
-#oled.fill_rect(0, 20, 128, 20, 1)
-#oled.text('Signal', 0, 25, 0)
-#oled.text('Send ping', 0, 45, 1)
-#oled.show()
-
 while True:
     move_snake(snake_dir)
-    #print(snake_dir)
     time.sleep_ms(200)
         
