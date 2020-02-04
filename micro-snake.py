@@ -1,6 +1,5 @@
 #Snake clone for Micropython
 #Problems with debouncing rotary encoder
-#Damn Git
 
 from machine import Pin, I2C
 import ssd1306
@@ -11,7 +10,8 @@ import urandom
 snake=[[10,10],[15,10],[20,10],[25,10],[30,10]]
 directions=['e','n','w','s']
 snake_dir='w'
-apple=[urandom.randrange(10,120),urandom.randrange(10,55)]
+apple=[urandom.randrange(18,120),urandom.randrange(18,55)]
+score=0
 
 
 # ESP32 Pin assignment 
@@ -32,29 +32,34 @@ push_b=Pin(5, Pin.IN)
 def move_snake(snake_dir):
     global snake
     global apple
+    global score
     
     if snake_dir=='e':
-        head=snake[0][0]-5
+        head=snake[0][0]-6
         print(head)
         snake.insert(0,[head,snake[0][1]])
+        time.sleep_ms(50)
     
             
     elif snake_dir=='w':
-        head=snake[0][0]+5
+        head=snake[0][0]+6
         snake.insert(0,[head,snake[0][1]])
+        time.sleep_ms(50)
         
     elif snake_dir=='n':
-        head=snake[0][1]-5
+        head=snake[0][1]-6
         snake.insert(0,[snake[0][0],head])
+        time.sleep_ms(50)
   
         
     elif snake_dir=='s':
-        head=snake[0][1]+5
+        head=snake[0][1]+6
         snake.insert(0,[snake[0][0],head])
+        time.sleep_ms(50)
 
     snake.pop()
     
-    if (snake[0][0] > 128) or (snake[0][0] < 0) or (snake[0][1] > 64) or (snake[0][1] < 0):
+    if (snake[0][0] > 128) or (snake[0][0] < 0) or (snake[0][1] > 64) or (snake[0][1] < 16):
         print('bump!')
         snake[0]=[64,32]
         snake_dir='w'
@@ -65,18 +70,20 @@ def move_snake(snake_dir):
         time.sleep(0.01)
         oled.invert(0)
         time.sleep(0.01)
+        score+=1
         
         #extend body after apple
         snake.insert(0, [snake[0][0],snake[0][1]])
         
         #new apple
-        apple=[urandom.randrange(10,120),urandom.randrange(10,55)]
+        apple=[urandom.randrange(18,120),urandom.randrange(18,55)]
     
     print('--------------')
     #print(snake)
     
     oled.fill(0)
-    oled.rect(0,0,128,64,1)
+    oled.rect(0,16,128,48,1)
+    oled.text('Apples %i' % score, 0,0)
     oled.rect(apple[0],apple[1],3,3,1)
     for segment in snake:
         oled.fill_rect(segment[0],segment[1],5,5,1)
